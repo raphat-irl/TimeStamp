@@ -9,41 +9,40 @@ import Foundation
 
 struct ChatCategorizer {
 
-    static func categorizeChats(chatsData: [Chat]) -> [String: [Chat]] {
-        var categorizedChats: [String: [Chat]] = [:]
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
-        
-        //TODO: change for loop into groupby
-        // souce: https://stackoverflow.com/questions/59753696/group-array-to-introduce-sections-to-uitableview-in-swift
-
-        for chat in chatsData {
-            let dateString = formatDate(chat.timestamp, with: dateFormatter)
-            categorizedChats[dateString, default: []].append(chat)
+    static func categorizeChats(chatsData: [Chat]) -> [[Chat]] {
+            let cal = Calendar.current
+            let groupedChats = Dictionary(grouping: chatsData) { chat in
+                let date = Date(timeIntervalSince1970: chat.timestamp)
+                return cal.startOfDay(for: date)
+            }
+            let sortedChats = groupedChats.sorted(by: { $0.key < $1.key }).map { $0.value }
+            return sortedChats
         }
 
-        return categorizedChats
-    }
-
-    static func printCategorizedChats(_ categorizedChats: [String: [Chat]]) {
-        let sortedDates = categorizedChats.keys.sorted()
-
-        for date in sortedDates {
-            print("Date: \(date)")
-            if let chats = categorizedChats[date] {
-                for chat in chats {
+        static func printCategorizedChats(_ categorizedChats: [[Chat]]) {
+            for chats in categorizedChats {
+                guard let timestamp = chats.first?.timestamp else {
+                    continue
+                }
+                let formattedDate = formatDate(timestamp)
+                print("Date: \(formattedDate)")
+                
+                // sort chat order in each category
+                let sortedChats = chats.sorted(by: { $0.timestamp > $1.timestamp })
+                
+                for chat in sortedChats {
                     print("  \(chat.text)")
                 }
+                print("------------------------")
             }
-            print("------------------------")
         }
-    }
 
-    private static func formatDate(_ timestamp: TimeInterval, with formatter: DateFormatter) -> String {
-        let date = Date(timeIntervalSince1970: timestamp)
-        return formatter.string(from: date)
-    }
+        private static func formatDate(_ timestamp: TimeInterval) -> String {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yyyy"
+            let date = Date(timeIntervalSince1970: timestamp)
+            return dateFormatter.string(from: date)
+        }
 }
 
 
