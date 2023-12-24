@@ -11,22 +11,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @IBOutlet weak var tableView: UITableView!
     
-    var chatData: [Chat] = []
-    
+    var chatData: [Chat] = chatsData
     
     func setUpData() {
-        
-        chatData = [
-            Chat(id: "1", timestamp: 1640217600, text: "Hello"),
-            Chat(id: "2", timestamp: 1640217600, text: "How are you?"),
-            Chat(id: "3", timestamp: 1640304000, text: "Good morning"),
-            Chat(id: "4", timestamp: 1640390400, text: "What's up?"),
-            Chat(id: "5", timestamp: 1640390400, text: "Not much"),
-            Chat(id: "6", timestamp: 1640476800, text: "Meeting at 2 PM"),
-            Chat(id: "7", timestamp: 1640476800, text: "Don't forget!"),
-            Chat(id: "8", timestamp: 1640563200, text: "How was your day?"),
-            Chat(id: "9", timestamp: 1640563200, text: "It was good")
-        ]
         
         let categorizedChats = ChatCategorizer.categorizeChats(chatsData: chatData)
         ChatCategorizer.printCategorizedChats(categorizedChats)
@@ -35,8 +22,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
+      
         tableView.register(UINib(nibName: "ChartCellTableViewCell", bundle: nil), forCellReuseIdentifier: "chatCell")
         setUpData()
         tableView.dataSource = self
@@ -69,8 +55,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         return ChatCategorizer.formatDate(timestamp ?? 0)
     }
-    
-    
     
     //MARK: UITableViewDelegate
     
