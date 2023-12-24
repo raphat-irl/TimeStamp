@@ -59,8 +59,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //MARK: UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40.0
+        return 20.0
     }
-    
 }
 
