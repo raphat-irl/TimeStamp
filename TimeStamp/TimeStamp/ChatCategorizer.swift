@@ -15,6 +15,7 @@ struct ChatCategorizer {
                 let date = Date(timeIntervalSince1970: chat.timestamp)
                 return cal.startOfDay(for: date)
             }
+        
             let sortedChats = groupedChats.sorted(by: { $0.key < $1.key }).map { $0.value }
             return sortedChats
         }
@@ -37,7 +38,7 @@ struct ChatCategorizer {
             }
         }
 
-        private static func formatDate(_ timestamp: TimeInterval) -> String {
+         static func formatDate(_ timestamp: TimeInterval) -> String {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd/MM/yyyy"
             let date = Date(timeIntervalSince1970: timestamp)
